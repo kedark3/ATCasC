@@ -1,0 +1,27 @@
+---
+- name: Create Tower Inventory Sources
+  awx.awx.tower_inventory_source:
+    credential:               "{{ item.credential | default(omit) }}"
+    description:              "{{ item.description | default(omit) }}"
+    group_by:                 "{{ item.group_by | default(omit) }}"
+    instance_filters:         "{{ item.instance_filters | default(omit) }}"
+    inventory:                "{{ item.inventory }}"
+    name:                     "{{ item.name }}"
+    overwrite:                "{{ item.overwrite | default(omit) }}"
+    overwrite_vars:           "{{ item.overwrite_vars | default(omit) }}"
+    source:                   "{{ item.source }}"
+    source_path:              "{{ item.source_path | default(omit) }}"
+    source_project:           "{{ item.source_project | default(omit) }}"
+    source_regions:           "{{ item.source_regions | default(omit) }}"
+    source_script:            "{{ item.source_script | default(omit) }}"
+    source_vars:              "{{ item.source_vars | default(omit) }}"
+    state:                    "{{ item.state | default('present') }}"
+    timeout:                  "{{ item.timeout | default(omit) }}"
+    tower_host:               "{{ tower_hostname }}"
+    tower_username:           admin
+    tower_password:           "{{ tower_admin_password }}"
+    validate_certs:           false
+    update_on_launch:         "{{ item.update_on_launch | default(omit) }}"
+    update_on_project_update: "{{ item.update_on_project_update | default(omit) }}"
+    update_cache_timeout:     "{{ item.update_cache_timeout | default(0) }}"
+  loop: "{{ tower_inventory_sources }}"

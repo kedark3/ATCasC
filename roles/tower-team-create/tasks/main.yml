@@ -1,0 +1,10 @@
+- name: Add tower teams
+  awx.awx.tower_team:
+    name: "{{ item.name }}"
+    organization:  "{{ item.organization | d('Default')}}"
+    state: "{{ item.state | d('present')}}"
+    tower_host: "{{ tower_hostname }}"
+    tower_username: admin
+    tower_password: "{{tower_admin_password}}"
+    tower_verify_ssl: false
+  loop: "{{ tower_teams }}"

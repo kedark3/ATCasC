@@ -1,0 +1,8 @@
+---
+- name: Backup Ansible Tower - JSON backup - only metadata/objects
+  hosts: "{{ target_hosts }}"
+  roles:
+    - role: roles/tower-roles/tower-cli-installer
+    - role: roles/tower-roles/tower-backup
+      meta_backup: True
+      backup_path: /mnt/backups

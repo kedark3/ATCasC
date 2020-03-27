@@ -1,0 +1,22 @@
+---
+- name: Create ansible tower workflows
+  awx.awx.tower_workflow_template:
+    allow_simultaneous:           "{{ workflow.allow_simultaneous | default('no') }}"
+    ask_extra_vars:               "{{ workflow.ask_extra_vars | default('no') }}"
+    ask_inventory:                "{{ workflow.ask_inventory | default('no') }}"
+    description:                  "{{ workflow.description | default('Created using Ansible Role') }}"
+    extra_vars:                   "{{ workflow.extra_vars | default(omit) }}"
+    inventory:                    "{{ workflow.inventory | default(omit) }}"
+    name:                         "{{ workflow.name }}"
+    organization:                 "{{ workflow.organization | default(omit) }}"
+    schema:                       "{{ workflow.schema }}"
+    state:                        "{{ workflow.state | default('present') }}"
+    survey:                       "{{ workflow.survey | default(omit) }}"
+    survey_enabled:               "{{ workflow.survey_enabled | default('no') }}"
+    tower_host:                   "{{ tower_hostname }}"
+    tower_username:               admin
+    tower_password:               "{{tower_admin_password}}"
+    tower_verify_ssl:             false
+  loop: "{{ tower_workflows }}"
+  loop_control:
+    loop_var: workflow

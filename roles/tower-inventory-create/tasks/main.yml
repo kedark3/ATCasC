@@ -1,0 +1,15 @@
+---
+- name: Create inventory
+  awx.awx.tower_inventory:
+    name:              "{{ item.name }}"
+    organization:      "{{ item.organization | default('Default') }}"
+    kind:              "{{ item.kind | default(omit) }}"
+    description:       "{{ item.description | default(omit) }}"
+    host_filter:       "{{ item.host_filter | default(omit) }}"
+    state:             "{{ item.state | default('present') }}"
+    tower_host:        "{{ tower_hostname }}"
+    tower_username:    admin
+    tower_password:    "{{ tower_admin_password }}"
+    validate_certs:    false
+    variables:         "{{ item.variables | default(omit) }}"
+  loop: "{{ tower_inventories }}"

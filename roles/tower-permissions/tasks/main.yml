@@ -1,0 +1,16 @@
+- name: Apply tower roles (aka permissions) to objects
+  awx.awx.tower_role:
+    credential:       "{{ item.credential | default(omit) }}"
+    inventory:        "{{ item.inventory | default(omit) }}"
+    job_template:     "{{ item.job_template | default(omit) }}"
+    organization:     "{{ item.organization | default(omit) }}"
+    project:          "{{ item.project | default(omit) }}"
+    role:             "{{ item.role }}"
+    state:            "{{ item.state | default('present') }}"
+    team:             "{{ item.team | default(omit) }}"
+    user:             "{{ item.user | default(omit) }}"
+    tower_host:       "{{ tower_hostname }}"
+    tower_username:   admin
+    tower_password:   "{{tower_admin_password}}"
+    tower_verify_ssl: false
+  loop: "{{ tower_permissions }}"

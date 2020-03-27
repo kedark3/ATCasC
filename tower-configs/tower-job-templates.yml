@@ -1,0 +1,73 @@
+---
+# Only Job name, type, project and playbook are required
+# Survey spec can be exported from existing job template using:
+# tower-cli job_template survey --name="my job template" -f yaml
+# https://github.com/ansible/tower-cli/blob/master/docs/source/cli_ref/usage/SURVEYS.rst
+tower_job_templates:
+  - name: Tower-backup-job-JSON-only
+    description: Tower meta backup job
+    job_type: run
+    inventory: satlab-admin-inventory
+    project: satlab-admin master
+    playbook: playbooks/setup-ansible-tower/meta-json-only-backup.yml
+    credentials: machine-creds-with-jenkins-pvt-key
+    ask_extra_vars: true
+    limit: infra-ansible-tower-01.example.com
+    survey_enabled: false
+    extra_vars:
+      target_hosts: infra-ansible-tower-01.example.com
+    verbosity: 3
+    state: present
+  - name: Tower-backup-job-full-backup
+    description: Tower full backup job - produces tar ball
+    job_type: run
+    inventory: satlab-admin-inventory
+    project: satlab-admin master
+    playbook: playbooks/setup-ansible-tower/full-backup.yml
+    credentials:
+      - machine-creds-with-jenkins-pvt-key
+      - satlab-admin-vault
+    ask_extra_vars: true
+    limit: infra-ansible-tower-01.example.com
+    survey_enabled: false
+    extra_vars:
+      target_hosts: infra-ansible-tower-01.example.com
+    verbosity: 3
+    state: present
+  - name: test-template-1
+    description: created by Ansible Playbook
+    job_type: run
+    inventory: RHVM-02
+    credentials: admin@internal-RHVM-02
+    project: Test Project
+    playbook: motd.yml
+    verbosity: 2
+  - name: Demo Job Template
+    project: Test Project
+    job_type: run
+    playbook: motd.yml
+    ask_extra_vars: false
+    concurrent_jobs_enabled: false
+    credentials: Demo Credential
+    verbosity: 0
+    inventory: localhost
+    state: present
+
+# You can retrieve a job along with its survey spec using tower cli as follows:
+# tower-cli receive --job_template <Name> --user admin --format yaml
+# If you need to add Survey, Survey spec would look like given below:
+# survey_spec:
+#   name: ''
+#   description: ''
+#   spec:
+#   - question_name: Target Host
+#     question_description: target host is required for playbook to work, this host
+#       needs to exist in the inventory
+#     required: true
+#     type: text
+#     variable: target_hosts
+#     min: 0
+#     max: 1024
+#     default: infra-ansible-tower-testing.infra.sat.rdu2.redhat.com
+#     choices: ''
+#     new_question: true

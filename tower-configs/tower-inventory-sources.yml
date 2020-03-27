@@ -1,0 +1,25 @@
+---
+tower_inventory_sources:
+  - name: RHVM-01
+    source: rhv
+    inventory: RHVM-01
+    credential: admin@internal-RHVM-01
+    description: created by Ansible Tower
+    overwrite: true
+    update_on_launch: true
+    update_cache_timeout: 0
+  - name: RHVM-02
+    source: rhv
+    inventory: RHVM-02
+    credential: admin@internal-RHVM-02
+    description: created by Ansible Tower
+    overwrite: true
+    update_on_launch: true
+    update_cache_timeout: 0
+    # more options can be provided but for RHV source we are using, we need only this much.
+  - name: project-inventory-source-satlab-admin
+    inventory: satlab-admin-inventory
+    source: scm
+    source_project: satlab-admin master
+    source_path: inventory/hosts
+    update_on_project_update: yes

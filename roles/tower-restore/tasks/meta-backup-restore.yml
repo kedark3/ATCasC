@@ -1,0 +1,3 @@
+---
+- name: Run objects restore from json file
+  shell: "tower-cli send {{ restore_json_file }} --insecure -u  admin -p {{ tower_admin_password }}"

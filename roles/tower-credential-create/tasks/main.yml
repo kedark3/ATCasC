@@ -1,0 +1,22 @@
+- name: Add tower credential
+  awx.awx.tower_credential:
+    name:               "{{ credential.name }}"
+    username:           "{{ credential.username | default(omit) }}"
+    password:           "{{ credential.password | default(omit) }}"
+    description:        "{{ credential.description }}"
+    organization:       "{{ credential.organization | default('Default') }}"
+    kind:               "{{ credential.kind }}"
+    state:              "{{ credential.state | default(omit) }}"
+    host:               "{{ credential.host | default('')}}"
+    ssh_key_data:       "{{ credential.ssh_key_data | default(omit) }}"
+    user:               "{{ credential.user | default(omit) }}"
+    team:               "{{ credential.team | default(omit) }}"
+    vault_id:           "{{ credential.vault_id | default(omit) }}"
+    vault_password:     "{{ credential.vault_password | default(omit) }}"
+    tower_host:         "{{ tower_hostname }}"
+    tower_username:     admin
+    tower_password:     "{{ tower_admin_password }}"
+    tower_verify_ssl:   false
+  loop: "{{ tower_credentials }}"
+  loop_control:
+    loop_var: credential

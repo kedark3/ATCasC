@@ -1,0 +1,39 @@
+---
+# Commented out content is serving as example for you to add new content.
+tower_inventories:
+  # - name: Test Inventory - Simple
+  #   organization: Default
+  #   description: created by Ansible Playbook
+  #   state: present
+  #   variables:
+  #     var1: val1
+  #     var2:
+  #       - val2
+  #       - val3
+  #     var4:
+  #       - var5: val5
+  #         var6: val6
+  #       - var7:
+  #           var9: val9
+  #           var10: val10
+  - name: localhost
+    description: inventory for localhost
+    organization: Satellite
+  - name: satlab-admin-inventory
+    description: Load inventory from satlab-admin hosts file
+    organization: Satellite
+  - name: RHVM-01
+    organization: Satellite
+    description: created by Ansible Playbook - for RHVM-01
+    state: present
+  - name: RHVM-02
+    organization: Satellite
+    description: created by Ansible Playbook - for RHVM-02
+    state: present
+  # Smart inventory doesn't seem to work
+  # - name: Test Inventory - Smart
+  #   organization: Default
+  #   description: created by Ansible Playbook
+  #   state: present
+  #   kind: smart
+  #   host_filter: ansible

@@ -1,0 +1,36 @@
+---
+- name: Add Ansible Tower Job Template
+  awx.awx.tower_job_template:
+    name:                       "{{ job.name }}"
+    description:                "{{ job.description| default('') }}"
+    job_type:                   "{{ job.job_type | default('run') }}"
+    inventory:                  "{{ job.inventory | default('empty-inventory-default') }}"
+    credentials:                 "{{ job.credentials | default('') }}"
+    ask_extra_vars:             "{{ job.ask_extra_vars | default('yes') }}"
+    extra_vars:                 "{{ job.extra_vars | default(omit) }}"
+    ask_credential:             "{{ job.ask_credential | default('no') }}"
+    ask_diff_mode:              "{{ job.ask_diff_mode | default('no') }}"
+    ask_inventory:              "{{ job.ask_inventory | default('no') }}"
+    ask_job_type:               "{{ job.ask_job_type | default('no') }}"
+    ask_limit:                  "{{ job.ask_limit | default('no') }}"
+    limit:                      "{{ job.limit| default(omit) }}"
+    project:                    "{{ job.project }}"
+    playbook:                   "{{ job.playbook | default('main.yml') }}"
+    become_enabled:             "{{ job.become | default('no') }}"
+    concurrent_jobs_enabled:    "{{ job.concurrent_jobs_enabled | default('yes') }}"
+    fact_caching_enabled:       "{{ job.fact_caching_enabled| default('no')}}"
+    forks:                      "{{ job.forks | default(omit)}}"
+    state:                      "{{ job.state | default('present') }}"
+    survey_enabled:             "{{ job.survey_enabled | default('no') }}"
+    survey_spec:                "{{ job.survey_spec | default(omit) }}"
+    tower_host:                 "{{ tower_hostname }}"
+    tower_username:             "{{ tower_admin | default('admin') }}"
+    tower_password:             "{{ tower_admin_password }}"
+    tower_verify_ssl:           "{{ job.tower_verify_ssl | default('false') }}"
+    verbosity:                  "{{ job.verbosity | default(0) }}"
+  loop: "{{ tower_job_templates }}"
+  loop_control:
+    loop_var: job
+  tags:
+    - tower-job-template-create
+...

@@ -1,0 +1,34 @@
+---
+- block:
+  - name: Download Tower Install Tar Ball
+    get_url:
+      url: "{{ tower_setup_bundle_tar_url }}"
+      dest: /tmp/
+    register: tower_tar_path
+  - debug:
+      msg: "Downloaded Tower tar at location {{ tower_tar_path.dest }}"
+
+  - name: Untar Ansible tower setup
+    unarchive:
+      src: "{{ tower_tar_path.dest }}"
+      dest: /tmp/
+      remote_src: yes
+      extra_opts:
+        - --transform
+        - s|^[^/]*|setup|
+
+  - name: execute  ./setup.sh script to restore tower
+    shell: >
+     ./setup.sh -e admin_password='{{ tower_admin_password }}' -e pg_password='{{ tower_pg_password }}' \
+      -e rabbitmq_password='{{ tower_rabbitmq_password }}' -e restore_backup_file="{{ restore_tar_file }}/" -r
+    args:
+      chdir: /tmp/setup
+
+  always:
+    - name: remove files/directories
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "{{ tower_tar_path.dest }}"
+        - /tmp/setup

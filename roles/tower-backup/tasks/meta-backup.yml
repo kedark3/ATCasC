@@ -1,0 +1,9 @@
+---
+- name: Run objects backup to generate json file
+  shell: "tower-cli receive --all >> {{ backup_json_file }}"
+
+- name: Symlink "{{ backup_json_file }}" to backup-latest.json
+  file:
+    src: "{{ backup_json_file }}"
+    dest: "{{ backup_path }}/backup-latest.json"
+    state: link

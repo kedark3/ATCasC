@@ -1,0 +1,6 @@
+# ---
+tower_organization:
+  - name: Satellite
+    state: present # optional
+  - name: Default
+    state: absent

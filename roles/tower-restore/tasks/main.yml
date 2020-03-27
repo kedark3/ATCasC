@@ -1,0 +1,8 @@
+---
+# tasks file for roles/tower-roles/tower-backup
+- name: Restore full backup if variable 'full_backup' is true
+  import_tasks: full-backup-restore.yml
+  when: full_backup|bool
+- name: Restore meta objects json backup if variable 'meta_backup' is true
+  import_tasks: meta-backup-restore.yml
+  when: meta_backup|bool

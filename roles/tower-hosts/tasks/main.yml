@@ -1,0 +1,13 @@
+---
+- name: Add tower host
+  awx.awx.tower_host:
+    name:             "{{ item.name }}"
+    description:      "{{ item.description | d('created via Ansible Playbook') }}"
+    inventory:        "{{ item.inventory }}"
+    state:            "{{ item.state | d('present')}}"
+    variables:        "{{ item.variables | d('') }}"
+    tower_host:       "{{ tower_hostname }}"
+    tower_username:   admin
+    tower_password:   "{{tower_admin_password}}"
+    tower_verify_ssl: false
+  loop: "{{ tower_hosts }}"

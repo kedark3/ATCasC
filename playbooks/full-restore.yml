@@ -1,0 +1,9 @@
+---
+- name: Restore Ansible Tower - From Complete backup - including DB
+  hosts: "{{ target_hosts }}"
+  roles:
+    - role: roles/tower-roles/tower-cli-installer
+    - role: roles/tower-roles/tower-restore
+      full_backup: True
+      backup_path: /mnt/backups
+      tower_setup_bundle_tar_url: https://releases.ansible.com/ansible-tower/setup-bundle/ansible-tower-setup-bundle-latest.el7.tar.gz

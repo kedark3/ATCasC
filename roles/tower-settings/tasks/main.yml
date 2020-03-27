@@ -1,0 +1,14 @@
+---
+#update tower setting path
+# TODO: Convert to use collections after https://github.com/ansible/awx/issues/6355 fixed
+- name:  Update settings in tower
+  tower_settings:
+    name:               "{{ item.key }}"
+    value:              "{{ item.value }}"
+    tower_host:         "{{ tower_hostname }}"
+    tower_username:     admin
+    tower_password:     "{{ tower_admin_password }}"
+    tower_verify_ssl:   no
+  when: tower_setting_params is defined
+  loop: "{{ tower_setting_params }}"
+...

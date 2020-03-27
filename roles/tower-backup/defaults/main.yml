@@ -1,0 +1,8 @@
+---
+# defaults file for roles/tower-roles/tower-backup
+full_backup: False
+meta_backup: False
+# Replace following path with path of your choice
+backup_path: /root
+backup_json_file: "{{ backup_path }}/backup-{{ ansible_date_time.epoch }}.json"
+tower_setup_bundle_tar_url: https://releases.ansible.com/ansible-tower/setup-bundle/ansible-tower-setup-bundle-latest.el7.tar.gz

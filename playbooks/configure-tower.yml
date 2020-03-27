@@ -1,0 +1,25 @@
+---
+# Note: This playbook needs ansible-tower-cli installed and configured to run successfully.
+- name: Playbook to configure ansible tower post installation
+  hosts: "{{ target_hosts }}"
+  pre_tasks:
+    - name: Include vars from tower-configs directory
+      include_vars:
+        dir: tower-configs
+        ignore_files: [tower-config.yml.template]
+        extensions: ["json", "yaml", "yml"]
+  roles:
+    - { role: roles/tower-cli-installer}
+    - { role: roles/tower-settings, when: tower_setting_params is defined }
+    - { role: roles/tower-org-create, when: tower_organization is defined }
+    - { role: roles/tower-user-create, when: tower_user_accounts is defined }
+    - { role: roles/tower-team-create, when: tower_teams is defined }
+    - { role: roles/tower-credential-create, when: tower_credentials is defined }
+    - { role: roles/tower-inventory-create, when: tower_inventories is defined }
+    - { role: roles/tower-project-create, when: tower_projects is defined }
+    - { role: roles/tower-inventory-sources-create, when: tower_inventory_sources is defined }
+    - { role: roles/tower-hosts, when: tower_hosts is defined }
+    - { role: roles/tower-job-template-create, when: tower_job_templates is defined }
+    - { role: roles/tower-notifications, when: tower_notifications is defined }
+    - { role: roles/tower-workflow-create, when: tower_workflows is defined }
+    - { role: roles/tower-permissions, when: tower_permissions is defined }
