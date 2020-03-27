@@ -1,64 +1,64 @@
-# Playbooks to Deploy-Configure Ansible Tower
+# Playbooks to Deploy-Configure Ansible Tower/AWX
 
-THIS IS a WORK in PROGRESS.
 
-This directory contains playbooks that can be used to deploy and configure Ansible Tower(AT) using Ansible.
+This repository contains all the required Collections, Roles, Sample configs and Playbooks that can let you configure your ansible tower using code and also let you maintain the configurations-as-code. Hence Ansible-Tower-Configuration-as-Code (ATCasC)
 
 Requirements
 ------------
 In order to execute the playbooks successfully, you would want to review following two files:
 
-* deploy-template-config.yml - This file contains all necessary variables to deploy a new VM on RHV using the template specified and resource configurations.
-* tower-config-vars.yml - This variables file is dedicated to configure the Ansible Tower post deployment and is referenced by `configure-tower.yml` playbook.
+* Tower-CLI python package is needed to be installed on your computer. Also, Python3-pip. If not, `tower-cli-installer` role will attempt to install it.
 
+* Another thing that you need to do is look at `tower-configs/` directory that will house all the configurations-as-code pieces. You don't necessarily have to have everything, but at the minimum you need to have `tower-configs/tower-hostname.yml` filled with correct hostname, username and password.
 
-How to use files in this directory
-----------------------------------
+* This repo assumes you have installed the Ansible Tower or AWX and it has license added to it, if needed.
+
+Directory structure
+-------------------
+
+We have following directories in the Repo:
+
+* collections: This directory houses awx.awx collection that is downloaded from ansible galaxy As-is using following command:
+```
+ansible-galaxy collection install awx.awx -p collections/
+```
+
+* playbooks: This directory contains all the provided playbooks.
+
+* roles: contains all the tower configuration roles.
+
+* tower-configs: This directory houses all the files needed to config various parts of Ansible Tower.
+
+* ansible.cfg: only config we are adding here is collections_paths, everything else is inherited from global ansible.cfg file automatically.
+
+Playbooks in this repo
+----------------------
 There are 3 playbooks in this directory.
-1) install-tower.yml -- This playbook is designed to use `deploy-template-config.yml` and Deploy a VM from template and configure it, install Ansible Tower, tower-cli etc.
+* configure-ldap-on-tower.yml : This playbook allows you to only configure LDAP on your AT, and it uses settings from `tower-configs/tower-settings-params.yml` which actually can house LDAP and other AT settings too. Since it primarily is used for LDAP, playbook is named such.
 
-2) configure-tower.yml -- This is next playbook, that is used to perform post deploy config on tower. That means, that playbook will create Users, Orgs, projects, Job Templates, LDAP Config and so on. It refers `tower-config-vars.yml` to understand what needs to be done. And to maintain AT as IaC(Infrastructure-as-Code) then it is best to updtae the config-vars and re-run the playbook.
+* configure-tower.yml : This playbook will call all of the Roles in `roles/` directory systematically to configure your tower using configurations from `tower-configs/` directory.
 
-3) deploy-tower-end-to-end.yml -- This playbook, very simply, combines above two playbooks and can run end-to-end to provide you ready to user Ansible tower.
+* TODO: List other playbook.
+
+
 
 Example Execution commands
 ---------------------------
 
-* To run end-to-end:
-```
-ansible-playbook playbooks/setup-ansible-tower/deploy-tower-end-to-end.yml
-```
-* To run install-only:
-```
-ansible-playbook playbooks/setup-ansible-tower/install-tower.yml
-```
-* To run config only:
-```
-ansible-playbook -i inventory -i <ip_addr_for_tower>, -l <ip_addr_for_tower> -u root playbooks/setup-ansible-tower/configure-tower.yml -e target_hosts=<ip_addr_for_tower>
-```
+* To deploy tower on a VM: <LINK TO Infra Playbooks>
 
-To Run meta backup/full backup:
+* To run config LDAP only:
 ```
-ansible-playbook -i inventory -i <tower IP or hostname>, -l <tower IP or hostname> meta-json-only-backup.yml -e 'target_hosts=<tower IP or hostname>' -u root
-ansible-playbook -i inventory -i <tower IP or hostname>, -l <tower IP or hostname> full-backup.yml -e 'target_hosts=<tower IP or hostname>' -u root
+ansible-playbook playbooks/configure-ldap-on-tower.yml -K
 ```
+`-K` is needed in case you define `install_pip: true` for `tower-cli-installer` role.
 
-To Run meta backup/full restore:
+* To configure tower:
+```
+ansible-playbook playbooks/configure-tower.yml -K
+```
+`-K` is needed in case you define `install_pip: true` for `tower-cli-installer` role.
 
-```
-ansible-playbook -i inventory -i <tower IP or hostname>, -l <tower IP or hostname> meta-json-only-restore.yml -e 'target_hosts=<tower IP or hostname>' -u root
-ansible-playbook -i inventory -i <tower IP or hostname>, -l <tower IP or hostname> full-restore.yml -e 'target_hosts=<tower IP or hostname>' -u root
-```
-
-To configure LDAP on tower:
-```
-ansible-playbook -i inventory -i <tower IP or hostname>, -l <tower IP or hostname> playbooks/setup-ansible-tower/configure-ldap-on-tower.yaml -e target_hosts=<tower IP or hostname> -u root
-```
-
-To upgrade Ansible Tower:
-```
-ansible-playbook upgrade-tower.yml -u root -e target_hosts=<IP or hostname> -l <IP or hostname> -e tower_setup_bundle_tar_url=<setup_bundle_url_of_desired_version>
-```
 
 License
 -------

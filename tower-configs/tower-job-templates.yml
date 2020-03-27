@@ -4,44 +4,16 @@
 # tower-cli job_template survey --name="my job template" -f yaml
 # https://github.com/ansible/tower-cli/blob/master/docs/source/cli_ref/usage/SURVEYS.rst
 tower_job_templates:
-  - name: Tower-backup-job-JSON-only
-    description: Tower meta backup job
-    job_type: run
-    inventory: satlab-admin-inventory
-    project: satlab-admin master
-    playbook: playbooks/setup-ansible-tower/meta-json-only-backup.yml
-    credentials: machine-creds-with-jenkins-pvt-key
-    ask_extra_vars: true
-    limit: infra-ansible-tower-01.example.com
-    survey_enabled: false
-    extra_vars:
-      target_hosts: infra-ansible-tower-01.example.com
-    verbosity: 3
-    state: present
-  - name: Tower-backup-job-full-backup
-    description: Tower full backup job - produces tar ball
-    job_type: run
-    inventory: satlab-admin-inventory
-    project: satlab-admin master
-    playbook: playbooks/setup-ansible-tower/full-backup.yml
-    credentials:
-      - machine-creds-with-jenkins-pvt-key
-      - satlab-admin-vault
-    ask_extra_vars: true
-    limit: infra-ansible-tower-01.example.com
-    survey_enabled: false
-    extra_vars:
-      target_hosts: infra-ansible-tower-01.example.com
-    verbosity: 3
-    state: present
   - name: test-template-1
     description: created by Ansible Playbook
     job_type: run
-    inventory: RHVM-02
-    credentials: admin@internal-RHVM-02
+    inventory: RHVM-01
+    credentials: admin@internal-RHVM-01
     project: Test Project
     playbook: motd.yml
     verbosity: 2
+    extra_vars:
+      target_hosts: infra-ansible-tower-01.example.com
   - name: Demo Job Template
     project: Test Project
     job_type: run

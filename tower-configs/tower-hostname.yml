@@ -1,2 +1,4 @@
 ---
-tower_hostname: tower.example.com
+tower_hostname: ansible-tower-web-svc-test-project.ocp-sprout-02.cmqe.lab.eng.rdu2.redhat.com
+tower_username: admin
+tower_admin_password: changeme

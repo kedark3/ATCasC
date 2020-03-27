@@ -1,11 +1,12 @@
 ---
 # Note: This playbook needs ansible-tower-cli installed and configured to run successfully.
 - name: Playbook to configure ansible tower for ldap authentication
-  hosts: "{{ target_hosts }}"
+  hosts: localhost
+  connection: local
   pre_tasks:
     - name: Include vars from tower-configs directory
       include_vars:
-        dir: tower-configs
+        dir: ../tower-configs
         ignore_files: [tower-config.yml.template]
         extensions: ["json", "yaml", "yml"]
   roles:

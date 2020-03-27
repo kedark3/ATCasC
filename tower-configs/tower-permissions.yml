@@ -23,6 +23,3 @@ tower_permissions:
   - job_template: test-template-1
     team: satellite-qe
     role: execute
-  - job_template: Tower-backup-job-JSON-only
-    team: satlab-admin
-    role: execute

@@ -5,11 +5,15 @@
       package:
         name: "{{ epel_release_rpm }}"
         state: present
+      when: install_pip|bool
+      become: true
 
     - name: Ensure python pip2 is installed
       package:
         name: python3-pip
         state: present
+      when: install_pip|bool
+      become: true
 
     - name: Ensure ansible-tower-cli is installed
       pip:
@@ -22,3 +26,5 @@
       yum:
         name: epel-release
         state: absent
+      when: install_pip|bool
+      become: true

@@ -8,15 +8,7 @@ tower_inventory_sources:
     overwrite: true
     update_on_launch: true
     update_cache_timeout: 0
-  - name: RHVM-02
-    source: rhv
-    inventory: RHVM-02
-    credential: admin@internal-RHVM-02
-    description: created by Ansible Tower
-    overwrite: true
-    update_on_launch: true
-    update_cache_timeout: 0
-    # more options can be provided but for RHV source we are using, we need only this much.
+  # more options can be provided but for RHV source we are using, we need only this much.
   - name: project-inventory-source-satlab-admin
     inventory: satlab-admin-inventory
     source: scm
