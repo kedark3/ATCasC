@@ -8,8 +8,8 @@
     host_filter:       "{{ item.host_filter | default(omit) }}"
     state:             "{{ item.state | default('present') }}"
     tower_host:        "{{ tower_hostname }}"
-    tower_username:    admin
+    tower_username:    "{{ tower_username | default('admin') }}"
     tower_password:    "{{ tower_admin_password }}"
-    validate_certs:    false
+    validate_certs:    "{{ tower_verify_ssl | default('false')}}"
     variables:         "{{ item.variables | default(omit) }}"
   loop: "{{ tower_inventories }}"

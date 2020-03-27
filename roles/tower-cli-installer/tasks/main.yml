@@ -2,20 +2,21 @@
 # very basic tasks to ensure pip and tower-cli is installed
 - block:
     - name: Enable EPEL repo
-      yum:
-        name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+      package:
+        name: "{{ epel_release_rpm }}"
         state: present
 
     - name: Ensure python pip2 is installed
-      yum:
-        name: python2-pip
+      package:
+        name: python3-pip
         state: present
 
     - name: Ensure ansible-tower-cli is installed
       pip:
         name: ansible-tower-cli
         state: present
-        executable: /usr/bin/pip2
+        extra_args: --user
+        executable: /usr/bin/pip3
   always:
     - name: Disable EPEL repo
       yum:

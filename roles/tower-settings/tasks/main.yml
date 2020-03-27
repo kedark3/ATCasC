@@ -6,9 +6,9 @@
     name:               "{{ item.key }}"
     value:              "{{ item.value }}"
     tower_host:         "{{ tower_hostname }}"
-    tower_username:     admin
+    tower_username:     "{{ tower_username | default('admin') }}"
     tower_password:     "{{ tower_admin_password }}"
-    tower_verify_ssl:   no
+    tower_verify_ssl:   "{{ tower_verify_ssl | default('false')}}"
   when: tower_setting_params is defined
   loop: "{{ tower_setting_params }}"
 ...
