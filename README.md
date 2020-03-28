@@ -3,6 +3,8 @@
 
 This repository contains all the required Collections, Roles, Sample configs and Playbooks that can let you configure your ansible tower using code and also let you maintain the configurations-as-code. Hence Ansible-Tower-Configuration-as-Code (ATCasC)
 
+This is declarative way to configure AWX or Ansible Tower. You specify a list of resources you would like, whereas for imperative you specify a list of commands to run to create the resources that you want. In this repo, you just have to declare WHAT you need in `tower-configs/` directory and it takes care of HOW it can be created/achieved.
+
 Requirements
 ------------
 In order to execute the playbooks successfully, you would want to review following two files:
@@ -45,7 +47,7 @@ There are 3 playbooks in this directory.
 Example Execution commands
 ---------------------------
 
-* To deploy tower on a VM: <LINK TO Infra Playbooks>
+* To deploy tower on a VM: https://github.com/kedark3/infra-playbooks/tree/master/roles/tower-roles/deploy_ansible_tower
 
 * To run config LDAP only:
 ```
@@ -59,6 +61,17 @@ ansible-playbook playbooks/configure-tower.yml -K
 ```
 `-K` is needed in case you define `install_pip: true` for `tower-cli-installer` role.
 
+* To run backup - meta only(JSON):
+```
+ansible-playbook playbooks/meta-json-only-backup.yml
+```
+Default path for backup is `backups/` in root of this repo.
+
+* To run restore - meta only(JSON):
+```
+ansible-playbook playbooks/meta-json-only-restore.yml
+```
+Default path for backup is `backups/` in root of this repo.
 
 License
 -------
