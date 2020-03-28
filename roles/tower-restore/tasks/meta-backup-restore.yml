@@ -1,3 +1,8 @@
 ---
 - name: Run objects restore from json file
-  shell: "tower-cli send {{ restore_json_file }} --insecure -u  admin -p {{ tower_admin_password }}"
+  awx.awx.tower_send:
+    assets:           "{{ restore_content.assets }}"
+    tower_host:       "{{ tower_hostname }}"
+    tower_username:   "{{ tower_username | default('admin') }}"
+    tower_password:   "{{tower_admin_password}}"
+    tower_verify_ssl: "{{ tower_verify_ssl | default('false')}}"

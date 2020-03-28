@@ -6,5 +6,6 @@ meta_backup: False
 backup_path: /root
 restore_tar_file: "{{ backup_path }}/tower-backup-latest.tar.gz"
 restore_json_file: "{{ backup_path }}/backup-latest.json"
+restore_content: "{{ lookup('file',restore_json_file) }}"
 # following variable should be set in encrypted ansible-vault
 # tower_admin_password: <admin_password>

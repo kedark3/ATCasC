@@ -1,9 +1,12 @@
 ---
-- name: Backup Ansible Tower - JSON backup - only metadata/objects
+- name: Restore Ansible Tower - JSON backup - only metadata/objects
   hosts: localhost
   connection: local
+  pre_tasks:
+    - name: Include vars for tower hostname, user,password
+      include_vars: ../tower-configs/tower-hostname.yml
   roles:
-    - role: roles/tower-roles/tower-cli-installer
-    - role: roles/tower-roles/tower-restore
+    - role: roles/tower-cli-installer
+    - role: roles/tower-restore
       meta_backup: True
-      backup_path: /mnt/backups
+      backup_path: ../backups
