@@ -1,6 +1,7 @@
 - name: Add tower org
   awx.awx.tower_organization:
      name:                   "{{ item.name }}"
+     custom_virtualenv:      "{{ item.custom_virtualenv | default(omit) }}"
      state:                  "{{ item.state| default('present') }}"
      tower_host:             "{{ tower_hostname }}"
      tower_username:         "{{ tower_username | default('admin') }}"
