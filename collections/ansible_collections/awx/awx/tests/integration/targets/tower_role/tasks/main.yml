@@ -1,9 +1,13 @@
 ---
+- name: Generate names
+  set_fact:
+    username: "AWX-Collection-tests-tower_role-user-{{ lookup('password', '/dev/null chars=ascii_letters length=16') }}"
+
 - name: Create a User
   tower_user:
     first_name: Joe
     last_name: User
-    username: joe
+    username: "{{ username }}"
     password: "{{ 65535 | random | to_uuid }}"
     email: joe@example.org
     state: present
@@ -15,7 +19,7 @@
 
 - name: Add Joe to the update role of the default Project
   tower_role:
-    user: joe
+    user: "{{ username }}"
     role: update
     project: Demo Project
     state: "{{ item }}"
@@ -28,9 +32,39 @@
     that:
       - "result is changed"
 
+- name: Create a workflow
+  tower_workflow_template:
+    name: test-role-workflow
+    organization: Default
+    state: present
+
+- name: Add Joe to workflow execute role
+  tower_role:
+    user: "{{ username }}"
+    role: execute
+    workflow: test-role-workflow
+    state: present
+  register: result
+
+- assert:
+    that:
+      - "result is changed"
+
+- name: Add Joe to workflow execute role, no-op
+  tower_role:
+    user: "{{ username }}"
+    role: execute
+    workflow: test-role-workflow
+    state: present
+  register: result
+
+- assert:
+    that:
+      - "result is not changed"
+
 - name: Delete a User
   tower_user:
-    username: joe
+    username: "{{ username }}"
     email: joe@example.org
     state: absent
   register: result

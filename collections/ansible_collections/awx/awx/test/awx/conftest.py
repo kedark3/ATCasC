@@ -2,6 +2,7 @@ from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
 import io
+import os
 import json
 import datetime
 import importlib
@@ -46,10 +47,22 @@ def sanitize_dict(din):
         return str(din)  # translation proxies often not string but stringlike
 
 
+@pytest.fixture(autouse=True)
+def collection_path_set(monkeypatch):
+    """Monkey patch sys.path, insert the root of the collection folder
+    so that content can be imported without being fully packaged
+    """
+    base_folder = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), os.pardir, os.pardir)
+    )
+    monkeypatch.syspath_prepend(base_folder)
+
+
 @pytest.fixture
 def collection_import():
     """These tests run assuming that the awx_collection folder is inserted
-    into the PATH before-hand. But all imports internally to the collection
+    into the PATH before-hand by collection_path_set.
+    But all imports internally to the collection
     go through this fixture so that can be changed if needed.
     For instance, we could switch to fully-qualified import paths.
     """
@@ -127,21 +140,46 @@ def run_module(request, collection_import):
                 else:
                     tower_cli_mgr = suppress()
                 with tower_cli_mgr:
-                    # Ansible modules return data to the mothership over stdout
-                    with redirect_stdout(stdout_buffer):
-                        try:
+                    try:
+                        # Ansible modules return data to the mothership over stdout
+                        with redirect_stdout(stdout_buffer):
                             resource_module.main()
-                        except SystemExit:
-                            pass  # A system exit indicates successful execution
+                    except SystemExit:
+                        pass  # A system exit indicates successful execution
+                    except Exception:
+                        # dump the stdout back to console for debugging
+                        print(stdout_buffer.getvalue())
+                        raise
 
         module_stdout = stdout_buffer.getvalue().strip()
-        result = json.loads(module_stdout)
+        try:
+            result = json.loads(module_stdout)
+        except Exception as e:
+            raise Exception('Module did not write valid JSON, error: {0}, stdout:\n{1}'.format(str(e), module_stdout))
         # A module exception should never be a test expectation
         if 'exception' in result:
             raise Exception('Module encountered error:\n{0}'.format(result['exception']))
         return result
 
     return rf
+
+
+@pytest.fixture
+def survey_spec():
+    return {
+        "spec": [
+            {
+                "index": 0,
+                "question_name": "my question?",
+                "default": "mydef",
+                "variable": "myvar",
+                "type": "text",
+                "required": False
+            }
+        ],
+        "description": "test",
+        "name": "test"
+    }
 
 
 @pytest.fixture
@@ -189,3 +227,19 @@ def vault_credential(organization):
         credential_type=ct, name='vault-cred',
         inputs={'vault_id': 'foo', 'vault_password': 'pas4word'}
     )
+
+
+@pytest.fixture
+def silence_deprecation():
+    """The deprecation warnings are stored in a global variable
+    they will create cross-test interference. Use this to turn them off.
+    """
+    with mock.patch('ansible.module_utils.basic.AnsibleModule.deprecate'):
+        yield
+
+
+@pytest.fixture
+def silence_warning():
+    """Warnings use global variable, same as deprecations."""
+    with mock.patch('ansible.module_utils.basic.AnsibleModule.warn'):
+        yield

@@ -28,12 +28,6 @@ options:
         - The name to use for the group.
       required: True
       type: str
-    new_name:
-      description:
-        - A new name for this group (for renaming)
-      required: False
-      type: str
-      version_added: "3.7"
     description:
       description:
         - The description to use for the group.
@@ -47,12 +41,32 @@ options:
       description:
         - Variables to use for the group.
       type: dict
+    hosts:
+      description:
+        - List of hosts that should be put in this group.
+      required: False
+      type: list
+      elements: str
+    children:
+      description:
+        - List of groups that should be nested inside in this group.
+      required: False
+      type: list
+      elements: str
+      aliases:
+        - groups
     state:
       description:
         - Desired state of the resource.
       default: "present"
       choices: ["present", "absent"]
       type: str
+    new_name:
+      description:
+        - A new name for this group (for renaming)
+      required: False
+      type: str
+      version_added: "3.7"
     tower_oauthtoken:
       description:
         - The Tower OAuth token to use.
@@ -85,6 +99,8 @@ def main():
         description=dict(required=False),
         inventory=dict(required=True),
         variables=dict(type='dict', required=False),
+        hosts=dict(type='list', elements='str'),
+        children=dict(type='list', elements='str', aliases=['groups']),
         state=dict(choices=['present', 'absent'], default='present'),
     )
 
@@ -120,12 +136,31 @@ def main():
     if variables is not None:
         group_fields['variables'] = json.dumps(variables)
 
+    association_fields = {}
+    for resource, relationship in (('hosts', 'hosts'), ('groups', 'children')):
+        name_list = module.params.get(relationship)
+        if name_list is None:
+            continue
+        id_list = []
+        for sub_name in name_list:
+            sub_obj = module.get_one(resource, **{
+                'data': {'inventory': inventory_id, 'name': sub_name}
+            })
+            if sub_obj is None:
+                module.fail_json(msg='Could not find {0} with name {1}'.format(resource, sub_name))
+            id_list.append(sub_obj['id'])
+        if id_list:
+            association_fields[relationship] = id_list
+
     if state == 'absent':
         # If the state was absent we can let the module delete it if needed, the module will handle exiting from this
         module.delete_if_needed(group)
     elif state == 'present':
         # If the state was present we can let the module build or update the existing group, this will return on its own
-        module.create_or_update_if_needed(group, group_fields, endpoint='groups', item_type='group')
+        module.create_or_update_if_needed(
+            group, group_fields, endpoint='groups', item_type='group',
+            associations=association_fields
+        )
 
 
 if __name__ == '__main__':
