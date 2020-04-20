@@ -9,9 +9,3 @@ tower_inventory_sources:
     update_on_launch: true
     update_cache_timeout: 0
   # more options can be provided but for RHV source we are using, we need only this much.
-  - name: project-inventory-source-satlab-admin
-    inventory: satlab-admin-inventory
-    source: scm
-    source_project: satlab-admin master
-    source_path: inventory/hosts
-    update_on_project_update: yes
