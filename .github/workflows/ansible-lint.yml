@@ -21,8 +21,5 @@ jobs:
       - name: Install ansible-lint
         run: pip install ansible-lint
 
-      - name: Install required collections
-        run: ansible-galaxy collection install -r collections/requirements.yml
-
       - name: Run ansible-lint
         run: ansible-lint *.yml
