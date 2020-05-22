@@ -4,8 +4,8 @@
     all: yes
     tower_host:       "{{ tower_hostname }}"
     tower_username:   "{{ tower_username | default('admin') }}"
-    tower_password:   "{{tower_admin_password}}"
-    tower_verify_ssl: "{{ tower_verify_ssl | default('false')}}"
+    tower_password:   "{{ tower_admin_password }}"
+    tower_verify_ssl: "{{ tower_verify_ssl | default('false') }}"
   register: json_backup_data
 
 - name: Copy content from backup data to a file
