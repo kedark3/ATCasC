@@ -1,5 +1,5 @@
 # Playbooks to Deploy-Configure Ansible Tower/AWX
-
+![Ansible Lint](https://github.com/kedark3/ATCasC/workflows/Ansible%20Lint/badge.svg)
 
 This repository contains all the required Collections, Roles, Sample configs and Playbooks that can let you configure your ansible tower using code and also let you maintain the configurations-as-code. Hence Ansible-Tower-Configuration-as-Code (ATCasC)
 
