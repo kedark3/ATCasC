@@ -18,8 +18,9 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Install ansible-lint
-        run: pip install ansible-lint
+      - name: ansible-lint
+        uses: ansible/ansible-lint-action@v4.1.0.post0
 
       - name: Run ansible-lint
-        run: ansible-lint *.yml
+        run: find . -type f -name "*.yml" | xargs ansible-lint -v
+
