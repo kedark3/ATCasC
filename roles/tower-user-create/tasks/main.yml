@@ -7,12 +7,12 @@
      email:               "{{ item.email | default('rhpds-admins@redhat.com') }}"
      first_name:          "{{ item.firstname | default(item.user) }}"
      last_name:           "{{ item.lastname | default(item.user) }}"
-     superuser:           "{{ item.superuser | default('no')}}"
-     state:               "{{ item.state| default('present')}}"
+     superuser:           "{{ item.superuser | default('no') }}"
+     state:               "{{ item.state | default('present') }}"
      tower_host:          "{{ tower_hostname }}"
      tower_username:      "{{ tower_username | default('admin') }}"
      tower_password:      "{{ tower_admin_password }}"
-     tower_verify_ssl:    "{{ tower_verify_ssl | default('false')}}"
+     tower_verify_ssl:    "{{ tower_verify_ssl | default('false') }}"
   loop: "{{ tower_user_accounts }}"
   when: tower_user_accounts is defined
   tags:

@@ -2,11 +2,11 @@
   awx.awx.tower_project:
     name:                            "{{ item.name }}"
     description:                     "{{ item.description }}"
-    organization:                    "{{ item.organization | d('Default')}}"
+    organization:                    "{{ item.organization | d('Default') }}"
     scm_url:                         "{{ item.scm_url }}"
     scm_clean:                       "{{ item.scm_clean | d('no') }}"
-    scm_type:                        "{{ item.scm_type | d('git')}}"
-    scm_credential:                  "{{ item.scm_credential | d(omit)}}"
+    scm_type:                        "{{ item.scm_type | d('git') }}"
+    scm_credential:                  "{{ item.scm_credential | d(omit) }}"
     scm_branch:                      "{{ item.scm_branch | d('master') }}"
     scm_delete_on_update:            "{{ item.scm_delete_on_update | d('false') }}"
     scm_update_on_launch:            "{{ item.scm_update_on_launch | d('false') }}"
@@ -16,8 +16,8 @@
     state:                           present
     tower_host:                      "{{ tower_hostname }}"
     tower_username:                  "{{ tower_username | default('admin') }}"
-    tower_password:                  "{{tower_admin_password}}"
-    tower_verify_ssl:                "{{ tower_verify_ssl | default('false')}}"
+    tower_password:                  "{{ tower_admin_password }}"
+    tower_verify_ssl:                "{{ tower_verify_ssl | default('false') }}"
   loop: "{{ tower_projects }}"
   tags:
     - tower-project-create
