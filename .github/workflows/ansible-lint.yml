@@ -1,0 +1,28 @@
+name: ansible-lint
+on:
+  push:
+  schedule:
+    - cron: '0 0 1 * *'
+
+jobs:
+  lint:
+    name: ansible-lint
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
+      - name: Install ansible-lint
+        run: pip install ansible-lint
+
+      - name: Install required collections
+        run: ansible-galaxy collection install -r collections/requirements.yml
+
+      - name: Run ansible-lint
+        run: ansible-lint *.yml
