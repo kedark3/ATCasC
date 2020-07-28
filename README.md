@@ -1,6 +1,10 @@
 # Playbooks to Deploy-Configure Ansible Tower/AWX
 ![Ansible Lint](https://github.com/kedark3/ATCasC/workflows/Ansible%20Lint/badge.svg)
 
+
+###NOTE: This project is now part of https://github.com/redhat-cop/tower_configuration and all updates will be made there directly. 
+
+
 This repository contains all the required Collections, Roles, Sample configs and Playbooks that can let you configure your ansible tower using code and also let you maintain the configurations-as-code. Hence Ansible-Tower-Configuration-as-Code (ATCasC)
 
 This is declarative way to configure AWX or Ansible Tower. You specify a list of resources you would like, whereas for imperative you specify a list of commands to run to create the resources that you want. In this repo, you just have to declare WHAT you need in `tower-configs/` directory and it takes care of HOW it can be created/achieved.
