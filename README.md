@@ -2,7 +2,7 @@
 ![Ansible Lint](https://github.com/kedark3/ATCasC/workflows/Ansible%20Lint/badge.svg)
 
 
-###NOTE: This project is now part of https://github.com/redhat-cop/tower_configuration and all updates will be made there directly. 
+### NOTE: This project is now part of https://github.com/redhat-cop/tower_configuration and all updates will be made there directly. 
 
 
 This repository contains all the required Collections, Roles, Sample configs and Playbooks that can let you configure your ansible tower using code and also let you maintain the configurations-as-code. Hence Ansible-Tower-Configuration-as-Code (ATCasC)
