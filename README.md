@@ -2,6 +2,9 @@
 ![Ansible Lint](https://github.com/kedark3/ATCasC/workflows/Ansible%20Lint/badge.svg)
 
 
+Downloads of the latest code are hosted at:
+- [Controller Configuration ](https://galaxy.ansible.com/ui/repo/published/infra/controller_configuration/)
+- [AAP Configuaration](https://galaxy.ansible.com/ui/repo/published/infra/aap_configuration/)
 ### NOTE: This project is now part of https://github.com/redhat-cop/tower_configuration and all updates will be made there directly. 
 
 
